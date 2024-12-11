@@ -2,11 +2,12 @@
 #include <vector>
 #include "Message.h"
 
+
 class Chat
 {
 public:
 	void registration();
-	void registration(std::string login, std::string password, std::string name);
+	void registration(std::string login, std::string password, std::string name); //to the test of programm
 	User login();
 	void userMenu();
 	void addMessage();

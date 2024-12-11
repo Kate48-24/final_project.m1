@@ -1,14 +1,16 @@
 #include <iostream>
 #include "Chat.h"
+#include "Exception.h"
+
 using namespace std;
 
 int main()
 {
-	system("chcp 1251");
+	
 	Chat chat;
 
-	chat.registration("l123", "123", "Kate");   //эти три строчки, чтобы не создавать каждый раз пользователей для проверки
-	chat.registration("l234", "234", "Andy");	//перед сдачей проекта их закомментировать	
+	/*chat.registration("l123", "123", "Kate");   //to test the program
+	chat.registration("l234", "234", "Andy");	//at the end, put it in a comment
 	chat.registration("l345", "345", "Kit");
 	/**/
 
@@ -16,13 +18,19 @@ int main()
 
 	while (chatWork)
 	{
-		cout << "Добро пожаловать в чат! Выберите действие: 1 - регистрация; 2 - вход; 0 - выход" << endl;
+		cout << "Welcome to the chat! Choose the action: 1 - registration; 2 - login; 0 - exit" << endl;
 		int choice_1;
 		cin >> choice_1;
 		switch (choice_1)
 		{
 		case 1:
-			chat.registration();
+			try {
+				chat.registration();
+			}
+			catch (const LoginException& e)
+			{
+				cout << e.what() << endl;
+			}
 			break;
 
 		case 2:
@@ -34,7 +42,7 @@ int main()
 			chatWork = false;
 			break;
 		default:
-			cout << "Ошибка! Выберите 1 или 2, или 0 для выхода" << endl;
+			cout << "Error! Choose 1 or 2, or 0 for exit." << endl;
 			break;
 		}
 	}

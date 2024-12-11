@@ -1,6 +1,7 @@
 #include "Message.h"
 
-Message::Message(std::string to, std::string from, std::string text) :_to(to), _from(from), _text(text)
+Message::Message(std::string senderLogin, std::string recipientLogin, std::string msgText) :
+	_from(senderLogin), _to(recipientLogin), _text(msgText)
 {
 }
 

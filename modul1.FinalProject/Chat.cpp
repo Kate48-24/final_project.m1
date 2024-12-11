@@ -1,20 +1,29 @@
 #include <iostream>
 #include "Chat.h"
+#include "Exception.h"
 
 void Chat::registration()
 {
     std::string login, password, name;
-    std::cout << "Введите логин: ";
+    std::cout << "Enter your login: ";
     std::cin >> login;
-    std::cout << "Введите пароль: ";
+    std::cout << "Enter your password: ";
     std::cin >> password;
-    std::cout << "Введите имя: ";
+    std::cout << "Enter your username: ";
     std::cin >> name;
+
+    for (const auto& user : _users)
+    {
+        if (user.getUserLogin() == login)
+        {
+            throw LoginException();
+        }
+    }
 
     User user = User(login, password, name);
     _users.push_back(user);
 
-    std::cout << "Регистрация завершена!" << std::endl;
+    std::cout << "Registration is completed!" << std::endl;
 }
 
 void Chat::registration(std::string login, std::string password, std::string name)
@@ -22,28 +31,28 @@ void Chat::registration(std::string login, std::string password, std::string nam
     User user = User(login, password, name);
     _users.push_back(user);
 
-    std::cout << "логин: " << login << ", пароль: " << password << ", имя: " << name << std::endl;
+    std::cout << "login: " << login << ", password: " << password << ", username: " << name << std::endl;
 }
 
 User Chat::login()
 {
     std::string login, password;
 
-    std::cout << "логин: ";
+    std::cout << "login: ";
     std::cin >> login;
-    std::cout << "пароль: ";
+    std::cout << "password: ";
     std::cin >> password;
 
     for (auto& user : _users)
     {
         if (login == user.getUserLogin() && password == user.getUserPassword())
         {
-            std::cout << "Привет, " << user.getUserName() << "!" << std::endl;
+            std::cout << "Hello, " << user.getUserName() << "!" << std::endl;
             _currentUser = std::make_shared <User>(user);
             return user;
         }
     }
-    std::cout << "Неправильные имя или пароль!" << std::endl;
+    std::cout << "Error: Incorrect name or password!" << std::endl;
 }
 
 void Chat::userMenu()
@@ -52,7 +61,7 @@ void Chat::userMenu()
 
     while (status_of_user)
     {
-        std::cout << "Меню: 1. Просмотреть сообщения, 2. Отправить сообщения, 0. Выход" << std::endl;
+        std::cout << "Menu: 1. View messages, 2. Send message, 0. Exit" << std::endl;
         int choice;
         std::cin >> choice;
 
@@ -76,7 +85,7 @@ void Chat::userMenu()
 void Chat::addMessage()
 {
     std::string to, text;
-    std::cout << "Кому: (Логин пользователя или 'all' для отправки всем пользователям чата)" << std::endl;
+    std::cout << "To: (Login of user or 'all' to send a message to all chat users)" << std::endl;
     std::cin >> to;
     std::string toLogin = "";
     if (to == "all")
@@ -95,19 +104,19 @@ void Chat::addMessage()
     }
     if (toLogin == "")
     {
-        std::cout << "Ошибка: не найден логин пользователя!" << std::endl;
+        std::cout << "Error: the user's login was not found!" << std::endl;
         return;
     }
 
-    std::cout << "Текст: ";
+    std::cout << "Text: ";
 
     std::cin.ignore(sizeof(text) / sizeof(text[0]), '\n'); //чтобы можно было вывести все слова в сообщении
     std::getline(std::cin, text);
     std::cin.ignore(0);
 
-    Message message = Message(toLogin, _currentUser->getUserLogin(), text);
+    Message message = Message(_currentUser->getUserLogin(), toLogin, text);
     _messages.push_back(message);
-    std::cout << "Ваше сообщение отправлено" << std::endl;
+    std::cout << "Your message has been sent" << std::endl;
 }
 void Chat::getMessage()
 {
@@ -115,7 +124,8 @@ void Chat::getMessage()
     {
         if ((message.getTo() == _currentUser->getUserLogin()) || (message.getTo() == "all"))
         {
-            std::cout << "От кого: " << message.getFrom() << "; Кому: " << message.getTo() << std::endl;
+            std::cout << "---------------------" << std::endl;
+            std::cout << "From: " << message.getFrom() << "; To: " << message.getTo() << std::endl;
             std::cout << message.getText() << std::endl;
             std::cout << std::endl;
         }

@@ -26,15 +26,23 @@ void Chat::registration()
     std::cout << "Registration is completed!" << std::endl;
 }
 
-void Chat::registration(std::string login, std::string password, std::string name)
+void Chat::registration(std::string login, std::string password, std::string name)          //for testing the program
 {
+    for (const auto& user : _users)
+    {
+        if (user.getUserLogin() == login)
+        {
+            throw LoginException();
+        }
+    }
+
     User user = User(login, password, name);
     _users.push_back(user);
 
     std::cout << "login: " << login << ", password: " << password << ", username: " << name << std::endl;
 }
 
-User Chat::login()
+bool Chat::login()
 {
     std::string login, password;
 
@@ -49,10 +57,11 @@ User Chat::login()
         {
             std::cout << "Hello, " << user.getUserName() << "!" << std::endl;
             _currentUser = std::make_shared <User>(user);
-            return user;
+            return true;
         }
     }
     std::cout << "Error: Incorrect name or password!" << std::endl;
+    return false;
 }
 
 void Chat::userMenu()
@@ -68,7 +77,7 @@ void Chat::userMenu()
         switch (choice)
         {
         case 1:
-            getMessage();
+            showMessage();
             break;
         case 2:
             addMessage();
@@ -110,7 +119,7 @@ void Chat::addMessage()
 
     std::cout << "Text: ";
 
-    std::cin.ignore(sizeof(text) / sizeof(text[0]), '\n'); //чтобы можно было вывести все слова в сообщении
+    std::cin.ignore(sizeof(text) / sizeof(text[0]), '\n'); //so that all the words in the message can be displayed
     std::getline(std::cin, text);
     std::cin.ignore(0);
 
@@ -118,7 +127,7 @@ void Chat::addMessage()
     _messages.push_back(message);
     std::cout << "Your message has been sent" << std::endl;
 }
-void Chat::getMessage()
+void Chat::showMessage()
 {
     for (auto& message : _messages)
     {

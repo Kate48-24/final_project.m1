@@ -1,3 +1,10 @@
+/*
+	TODO: 
+		1. перевести коментарии на английский
+		2. изменить имя функции chat::getMessage
+*/
+
+
 #include <iostream>
 #include "Chat.h"
 #include "Exception.h"
@@ -9,7 +16,7 @@ int main()
 	
 	Chat chat;
 
-	/*chat.registration("l123", "123", "Kate");   //to test the program
+	chat.registration("l123", "123", "Kate");   //for test the program
 	chat.registration("l234", "234", "Andy");	//at the end, put it in a comment
 	chat.registration("l345", "345", "Kit");
 	/**/
@@ -34,8 +41,10 @@ int main()
 			break;
 
 		case 2:
-			chat.login();
-			chat.userMenu();
+			if (chat.login())
+			{
+				chat.userMenu();
+			}
 			break;
 
 		case 0:

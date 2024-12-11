@@ -7,11 +7,11 @@ class Chat
 {
 public:
 	void registration();
-	void registration(std::string login, std::string password, std::string name); //to the test of programm
-	User login();
+	void registration(std::string login, std::string password, std::string name); //for testing the program
+	bool login();
 	void userMenu();
 	void addMessage();
-	void getMessage();
+	void showMessage();
 	std::shared_ptr <User> _currentUser = nullptr;
 
 private:
